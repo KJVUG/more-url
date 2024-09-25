@@ -15,6 +15,12 @@
             color: #333;
         }
 
+        .table-container {
+            width: 100%;
+            max-width: 1000px; /* 设置一个最大宽度 */
+            margin: 0 auto;
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
@@ -29,6 +35,12 @@
 
         th {
             background-color: #f2f2f2;
+        }
+
+        /* 鼠标悬停时描述字段的颜色变深 */
+        td.description:hover {
+            background-color: #dcdcdc;
+            cursor: pointer;
         }
 
         .actions {
@@ -61,6 +73,17 @@
                 padding: 4px 8px;
             }
         }
+
+        /* 搜索框样式 */
+        #searchInput {
+            width: 100%; /* 设置搜索框宽度为100% */
+            padding: 10px;
+            margin: 20px 0;
+            font-size: 16px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box; /* 确保padding不会影响宽度 */
+        }
     </style>
     <script>
         function openUrl(url) {
@@ -75,80 +98,133 @@
                 return 1; // 失败
             }
         }
+
+        // 实现搜索功能
+        function searchDescription() {
+            let input = document.getElementById('searchInput').value.toLowerCase();
+            let table = document.querySelector('tbody');
+            let rows = table.getElementsByTagName('tr');
+
+            for (let i = 0; i < rows.length; i++) {
+                let descCell = rows[i].getElementsByTagName('td')[1];
+                if (descCell) {
+                    let descText = descCell.textContent || descCell.innerText;
+                    if (descText.toLowerCase().indexOf(input) > -1) {
+                        rows[i].style.display = '';
+                    } else {
+                        rows[i].style.display = 'none';
+                    }
+                }
+            }
+        }
     </script>
 </head>
 <body>
     <h1>MORE-URL</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>描述</th>
-                <th>URL</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>1</td>
-                <td onclick="openUrl('www.baidu.com')">百度官网</td>
-                <td>www.baidu.com</td>
-            </tr>
-            <tr>
-                <td>2</td>
-                <td onclick="openUrl('https://blog.csdn.net/KJVUG')">CSDN官网</td>
-                <td>https://blog.csdn.net/KJVUG</td>
-            </tr>
-            <tr>
-                <td>3</td>
-                <td onclick="openUrl('https://gitee.com/kjvug/projects')">Gitee官网</td>
-                <td>https://gitee.com/kjvug/projects</td>
-            </tr>
-            <tr>
-                <td>4</td>
-                <td onclick="openUrl('https://www.4399.com/')">4399</td>
-                <td>https://www.4399.com/</td>
-            </tr>
-            <tr>
-                <td>5</td>
-                <td onclick="openUrl('https://www.ketangpai.com/#/login')">课堂派</td>
-                <td>https://www.ketangpai.com/#/login</td>
-            </tr>
-            <tr>
-                <td>6</td>
-                <td onclick="openUrl('https://yiyan.baidu.com/')">文心一言</td>
-                <td>https://yiyan.baidu.com/</td>
-            </tr>
-            <tr>
-                <td>7</td>
-                <td onclick="openUrl('https://www.wolai.com/v5Kuct5ZtPeVBk4NBUGBWF')">Spring Boot实战精讲笔记</td>
-                <td>https://www.wolai.com/v5Kuct5ZtPeVBk4NBUGBWF</td>
-            </tr>
-            <tr>
-                <td>8</td>
-                <td onclick="openUrl('https://www.bilibili.com/read/cv5216534/')">Java学习路线</td>
-                <td>https://www.bilibili.com/read/cv5216534/</td>
-            </tr>
-            <tr>
-                <td>9</td>
-                <td onclick="openUrl('https://cloud.realme.com/login.html')">realme互传</td>
-                <td>https://cloud.realme.com/login.html</td>
-            </tr>
-            <tr>
-                <td>10</td>
-                <td onclick="openUrl('https://wenku.baidu.com/ndlaunch/browse/chat')">百度文库</td>
-                <td>https://wenku.baidu.com/ndlaunch/browse/chat</td>
-            </tr>
-            <tr>
-                <td>11</td>
-                <td onclick="openUrl('https://zhiwen.xfyun.cn/generate')">讯飞智文</td>
-                <td>https://zhiwen.xfyun.cn/generate</td>
-            </tr>
-            <tr>
-                <td>12</td>
-                <td onclick="openUrl('https://www.processon.com/login')">ProcessOn</td>
-                <td>https://www.processon.com/login</td>
-            </tr>
-        </tbody>
-    </table>
+    <div class="table-container">
+        <input type="text" id="searchInput" onkeyup="searchDescription()" placeholder="搜索描述字段...">
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>描述</th>
+                    <th>URL</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td class="description" onclick="openUrl('www.baidu.com')">百度官网</td>
+                    <td>www.baidu.com</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td class="description" onclick="openUrl('https://blog.csdn.net/KJVUG')">CSDN官网</td>
+                    <td>https://blog.csdn.net/KJVUG</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td class="description" onclick="openUrl('https://gitee.com/kjvug/projects')">Gitee官网</td>
+                    <td>https://gitee.com/kjvug/projects</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td class="description" onclick="openUrl('https://www.4399.com/')">4399</td>
+                    <td>https://www.4399.com/</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td class="description" onclick="openUrl('https://www.ketangpai.com/#/login')">课堂派</td>
+                    <td>https://www.ketangpai.com/#/login</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td class="description" onclick="openUrl('https://yiyan.baidu.com/')">文心一言</td>
+                    <td>https://yiyan.baidu.com/</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td class="description" onclick="openUrl('https://www.wolai.com/v5Kuct5ZtPeVBk4NBUGBWF')">Spring Boot实战精讲笔记</td>
+                    <td>https://www.wolai.com/v5Kuct5ZtPeVBk4NBUGBWF</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td class="description" onclick="openUrl('https://www.bilibili.com/read/cv5216534/')">Java学习路线</td>
+                    <td>https://www.bilibili.com/read/cv5216534/</td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td class="description" onclick="openUrl('https://cloud.realme.com/login.html')">realme互传</td>
+                    <td>https://cloud.realme.com/login.html</td>
+                </tr>
+                <tr>
+                    <td>10</td>
+                    <td class="description" onclick="openUrl('https://wenku.baidu.com/ndlaunch/browse/chat')">百度文库</td>
+                    <td>https://wenku.baidu.com/ndlaunch/browse/chat</td>
+                </tr>
+                <tr>
+                    <td>11</td>
+                    <td class="description" onclick="openUrl('https://zhiwen.xfyun.cn/generate')">讯飞智文</td>
+                    <td>https://zhiwen.xfyun.cn/generate</td>
+                </tr>
+                <tr>
+                    <td>12</td>
+                    <td class="description" onclick="openUrl('https://www.processon.com/login')">ProcessOn</td>
+                    <td>https://www.processon.com/login</td>
+                </tr>
+				<tr>
+				    <td>13</td>
+				    <td class="description" onclick="openUrl('https://github.com/')">github</td>
+				    <td>https://github.com/</td>
+				</tr>
+				<tr>
+				    <td>14</td>
+				    <td class="description" onclick="openUrl('https://qwerty.kaiyi.cool/')">打字练习</td>
+				    <td>https://qwerty.kaiyi.cool/</td>
+				</tr>
+				<tr>
+				    <td>15</td>
+				    <td class="description" onclick="openUrl('https://leetcode.cn/problemset/')">力扣</td>
+				    <td>https://leetcode.cn/problemset/</td>
+				</tr>
+				<tr>
+				    <td>16</td>
+				    <td class="description" onclick="openUrl('https://www.nowcoder.com/')">牛客网</td>
+				    <td>https://www.nowcoder.com/</td>
+				</tr>
+				<tr>
+				    <td>17</td>
+				    <td class="description" onclick="openUrl('https://www.lanqiao.cn/')">蓝桥杯</td>
+				    <td>https://www.lanqiao.cn/</td>
+				</tr>
+				<tr>
+				    <td>18</td>
+				    <td class="description" onclick="openUrl('https://lfkj.web.jikehx.com/course-detail/_w8Q?promoteParamKey=1697194882557:223661&itemCourse=_w8Q')">课程详细</td>
+				    <td>https://lfkj.web.jikehx.com/course-detail/</td>
+				</tr>
+				
+            </tbody>
+        </table>
+    </div>
 </body>
 </html>
