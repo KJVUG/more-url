@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MORE-URL</title>
+	<link rel="icon" href="./img/url.png" type="image/png"/>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -16,15 +17,24 @@
         }
 
         .table-container {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap; /* 允许元素换行 */
             width: 100%;
             max-width: 1000px; /* 设置一个最大宽度 */
             margin: 0 auto;
         }
 
+        .table-column {
+            width: 29%; /* 每列宽度设置为 24.5% */
+            margin-bottom: 20px; /* 给每列添加底部边距 */
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
-            margin: 20px 0;
+            table-layout: fixed; /* 设置表格布局为固定宽度 */
+            height: 130px; /* 设置表格高度 */ /* 调整高度 */
         }
 
         th, td {
@@ -36,7 +46,9 @@
         th {
             background-color: #f2f2f2;
         }
-
+		tr{
+			height: 50px;
+		}
         /* 鼠标悬停时描述字段的颜色变深 */
         td.description:hover {
             background-color: #dcdcdc;
@@ -65,10 +77,19 @@
 
         /* 响应式设计 */
         @media (max-width: 768px) {
+            .table-container {
+                flex-direction: column; /* 小屏幕上将两列变成一列 */
+            }
+
+            .table-column {
+                width: 100%; /* 每一列宽度变为 100% */
+                margin-bottom: 20px; /* 给每列添加底部边距 */
+            }
+
             table {
                 font-size: 14px;
             }
-            
+
             .action-btn {
                 padding: 4px 8px;
             }
@@ -83,6 +104,15 @@
             border: 1px solid #ddd;
             border-radius: 4px;
             box-sizing: border-box; /* 确保padding不会影响宽度 */
+        }
+
+        /* 添加新的样式来调整间距 */
+        .table-container > div { /* 选择 table-container 的直接子元素 */
+            margin-right: 20px; /* 给每个子元素添加 20px 右边距 */
+        }
+
+        .table-container > div:last-child { /* 选择最后一个子元素 */
+            margin-right: 0; /* 最后一个子元素不需要右边距 */
         }
     </style>
     <script>
@@ -102,17 +132,20 @@
         // 实现搜索功能
         function searchDescription() {
             let input = document.getElementById('searchInput').value.toLowerCase();
-            let table = document.querySelector('tbody');
-            let rows = table.getElementsByTagName('tr');
+            let tables = document.querySelectorAll('tbody');
+            let rows;
 
-            for (let i = 0; i < rows.length; i++) {
-                let descCell = rows[i].getElementsByTagName('td')[1];
-                if (descCell) {
-                    let descText = descCell.textContent || descCell.innerText;
-                    if (descText.toLowerCase().indexOf(input) > -1) {
-                        rows[i].style.display = '';
-                    } else {
-                        rows[i].style.display = 'none';
+            for (let i = 0; i < tables.length; i++) {
+                rows = tables[i].getElementsByTagName('tr');
+                for (let j = 0; j < rows.length; j++) {
+                    let descCell = rows[j].getElementsByTagName('td')[0]; // 现在描述字段在第一个单元格
+                    if (descCell) {
+                        let descText = descCell.textContent || descCell.innerText;
+                        if (descText.toLowerCase().indexOf(input) > -1) {
+                            rows[j].style.display = '';
+                        } else {
+                            rows[j].style.display = 'none';
+                        }
                     }
                 }
             }
@@ -120,111 +153,127 @@
     </script>
 </head>
 <body>
-    <h1>MORE-URL</h1>
+    <h1><img src="img/url.png" height="45px"/>MORE-URL</h1>
+    <input type="text" id="searchInput" onkeyup="searchDescription()" placeholder="搜索描述字段...">
     <div class="table-container">
-        <input type="text" id="searchInput" onkeyup="searchDescription()" placeholder="搜索描述字段...">
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>描述</th>
-                    <th>URL</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>1</td>
-                    <td class="description" onclick="openUrl('www.baidu.com')">百度官网</td>
-                    <td>www.baidu.com</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td class="description" onclick="openUrl('https://blog.csdn.net/KJVUG')">CSDN官网</td>
-                    <td>https://blog.csdn.net/KJVUG</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td class="description" onclick="openUrl('https://gitee.com/kjvug/projects')">Gitee官网</td>
-                    <td>https://gitee.com/kjvug/projects</td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td class="description" onclick="openUrl('https://www.4399.com/')">4399</td>
-                    <td>https://www.4399.com/</td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td class="description" onclick="openUrl('https://www.ketangpai.com/#/login')">课堂派</td>
-                    <td>https://www.ketangpai.com/#/login</td>
-                </tr>
-                <tr>
-                    <td>6</td>
-                    <td class="description" onclick="openUrl('https://yiyan.baidu.com/')">文心一言</td>
-                    <td>https://yiyan.baidu.com/</td>
-                </tr>
-                <tr>
-                    <td>7</td>
-                    <td class="description" onclick="openUrl('https://www.wolai.com/v5Kuct5ZtPeVBk4NBUGBWF')">Spring Boot实战精讲笔记</td>
-                    <td>https://www.wolai.com/v5Kuct5ZtPeVBk4NBUGBWF</td>
-                </tr>
-                <tr>
-                    <td>8</td>
-                    <td class="description" onclick="openUrl('https://www.bilibili.com/read/cv5216534/')">Java学习路线</td>
-                    <td>https://www.bilibili.com/read/cv5216534/</td>
-                </tr>
-                <tr>
-                    <td>9</td>
-                    <td class="description" onclick="openUrl('https://cloud.realme.com/login.html')">realme互传</td>
-                    <td>https://cloud.realme.com/login.html</td>
-                </tr>
-                <tr>
-                    <td>10</td>
-                    <td class="description" onclick="openUrl('https://wenku.baidu.com/ndlaunch/browse/chat')">百度文库</td>
-                    <td>https://wenku.baidu.com/ndlaunch/browse/chat</td>
-                </tr>
-                <tr>
-                    <td>11</td>
-                    <td class="description" onclick="openUrl('https://zhiwen.xfyun.cn/generate')">讯飞智文</td>
-                    <td>https://zhiwen.xfyun.cn/generate</td>
-                </tr>
-                <tr>
-                    <td>12</td>
-                    <td class="description" onclick="openUrl('https://www.processon.com/login')">ProcessOn</td>
-                    <td>https://www.processon.com/login</td>
-                </tr>
-				<tr>
-				    <td>13</td>
-				    <td class="description" onclick="openUrl('https://github.com/')">github</td>
-				    <td>https://github.com/</td>
-				</tr>
-				<tr>
-				    <td>14</td>
-				    <td class="description" onclick="openUrl('https://qwerty.kaiyi.cool/')">打字练习</td>
-				    <td>https://qwerty.kaiyi.cool/</td>
-				</tr>
-				<tr>
-				    <td>15</td>
-				    <td class="description" onclick="openUrl('https://leetcode.cn/problemset/')">力扣</td>
-				    <td>https://leetcode.cn/problemset/</td>
-				</tr>
-				<tr>
-				    <td>16</td>
-				    <td class="description" onclick="openUrl('https://www.nowcoder.com/')">牛客网</td>
-				    <td>https://www.nowcoder.com/</td>
-				</tr>
-				<tr>
-				    <td>17</td>
-				    <td class="description" onclick="openUrl('https://www.lanqiao.cn/')">蓝桥杯</td>
-				    <td>https://www.lanqiao.cn/</td>
-				</tr>
-				<tr>
-				    <td>18</td>
-				    <td class="description" onclick="openUrl('https://lfkj.web.jikehx.com/course-detail/_w8Q?promoteParamKey=1697194882557:223661&itemCourse=_w8Q')">课程详细</td>
-				    <td>https://lfkj.web.jikehx.com/course-detail/</td>
-				</tr>
-				
-            </tbody>
-        </table>
+        <div class="table-column">
+            <table>
+                <thead>
+                    <tr>
+                        <th>常用官网</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="description" onclick="openUrl('www.baidu.com')">百度</td>
+                    </tr>
+                    <tr>
+                        <td class="description" onclick="openUrl('https://blog.csdn.net/KJVUG')">CSDN</td>
+                    </tr>
+                    <tr>
+                        <td class="description" onclick="openUrl('https://gitee.com/kjvug/projects')">Gitee</td>
+                    </tr>
+					<tr>
+						<td class="description" onclick="openUrl('https://github.com/')">github</td>
+					</tr>
+					<tr>
+					    <td class="description" onclick="openUrl('https://www.ketangpai.com/#/login')">课堂派</td>
+					</tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="table-column">
+            <table>
+                <thead>
+                    <tr>
+                        <th>AI工具</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="description" onclick="openUrl('https://yiyan.baidu.com/')">文心一言</td>
+                    </tr>
+					<tr>
+					    <td class="description" onclick="openUrl('https://wenku.baidu.com/ndlaunch/browse/chat')">百度文库</td>
+					</tr>
+					<tr>
+					    <td class="description" onclick="openUrl('https://zhiwen.xfyun.cn/generate')">讯飞智文</td>
+					</tr>
+					<tr>
+					    <td class="description" onclick="openUrl('https://www.processon.com/login')">ProcessOn</td>
+					</tr>
+					<tr>
+					    <td class="description" onclick="openUrl('https://www.iconfont.cn/')">阿里巴巴矢量图标库</td>
+					</tr>
+
+                </tbody>
+            </table>
+        </div>
+        <div class="table-column">
+            <table>
+                <thead>
+                    <tr>
+                        <th>常用资料</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="description" onclick="openUrl('https://www.bilibili.com/read/cv5216534/')">Java学习路线</td>
+                    </tr>
+					<tr>
+					    <td class="description" onclick="openUrl('https://www.wolai.com/v5Kuct5ZtPeVBk4NBUGBWF')">Spring Boot笔记</td>
+					</tr>
+					<tr>
+					    <td class="description" onclick="openUrl('https://pan.baidu.com/')">百度网盘</td>
+					</tr>
+					<tr>
+					    <td class="description" onclick="openUrl('hhttps://www.alipan.com/')">阿里云网盘</td>
+					</tr>
+                    <tr>
+                        <td class="description" onclick="openUrl('https://cloud.realme.com/login.html')">realme互传</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="table-column">
+            <table>
+                <thead>
+                    <tr>
+                        <th>休闲娱乐</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="description" onclick="openUrl('https://qwerty.kaiyi.cool/')">敲敲键盘</td>
+                    </tr>
+                    <tr>
+                        <td class="description" onclick="openUrl('https://leetcode.cn/problemset/')">力扣</td>
+                    </tr>
+                    <tr>
+                        <td class="description" onclick="openUrl('https://www.nowcoder.com/')">牛客网</td>
+                    </tr>
+                    <tr>
+                        <td class="description" onclick="openUrl('https://www.lanqiao.cn/')">蓝桥杯</td>
+                    </tr>
+					<tr>
+					    <td class="description" onclick="openUrl('https://mp.weixin.qq.com/')">微信公众号</td>
+					</tr>
+					<tr>
+					    <td class="description" onclick="openUrl('https://weibo.com/')">微博</td>
+					</tr>
+					<tr>
+					    <td class="description" onclick="openUrl('https://www.douyin.com/')">抖音</td>
+					</tr>
+					<tr>
+					    <td class="description" onclick="openUrl('https://www.jd.com/')">京东</td>
+					</tr>
+					<tr>
+					    <td class="description" onclick="openUrl('https://www.4399.com/')">4399</td>
+					</tr>
+                </tbody>
+            </table>
+        </div>
+		
     </div>
 </body>
 </html>
